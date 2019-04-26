@@ -1,0 +1,10 @@
+<p>
+  rooms-list works!
+</p>
+
+<ul> 
+  <li *ngFor="let room of rooms" (click)="roomClicked(room)" >
+      {{room.name}}
+      {{room.lastMessage}}
+  </li>
+</ul>
