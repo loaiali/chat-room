@@ -74,6 +74,11 @@ export class ChatRoomComponent implements OnInit {
     this._inputUser = ''
     this.chatService.removeUser(this.roomId, this._inputUser)
   }
+
+  _onLeaveRoomClicked(){
+    this.chatService.leaveRoom(this.roomId)
+  }
+
   _getTitle() {
     return this.roomId
   }

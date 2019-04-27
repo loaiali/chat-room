@@ -8,13 +8,19 @@ import { AppComponent } from './app.component';
 import { ChatRoomComponent } from './chat-room/chat-room.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { RoomsListComponent } from './rooms-list/rooms-list.component';
+import { LoginComponent } from './login/login.component';
+import { ChatMainComponent } from './chat-main/chat-main.component';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatRoomComponent,
     ChatMessageComponent,
-    RoomsListComponent
+    RoomsListComponent,
+    LoginComponent,
+    ChatMainComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

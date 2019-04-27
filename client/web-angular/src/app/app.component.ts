@@ -9,5 +9,4 @@ import { ChatService } from './chat.service';
 })
 export class AppComponent {
   title = 'rxjs-chat';
-  currentRoom: Observable<any>
 }

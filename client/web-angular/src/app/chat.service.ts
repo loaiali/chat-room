@@ -130,6 +130,15 @@ export class ChatService {
     })
   }
 
+  public leaveRoom(room){
+    Observable.create((observer) => {
+      // TODO: remove fake ack
+      this.socket.emit("leaveRoom", room)
+      observer.next("leaved")
+      observer.complete()
+    })
+  }
+
   private nowStr() {
     const d = new Date()
     const time = d.getHours().toString() + ": " + d.getMinutes().toString()
