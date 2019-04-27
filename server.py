@@ -12,11 +12,13 @@ def index():
     
     return render_template('login.html')
     
-
 @app.route('/chat')
 def handleMain():
     return render_template("main.html")      
 
+@socketio.on('register')
+def register(username,email,password):
+    mydb.insertUser(username,password,email,"")
 
 @socketio.on('signedIn')
 def signIn(userId):
@@ -25,7 +27,6 @@ def signIn(userId):
     mydb.updateSID(userId["token"],SID)
     rooms=mydb.retrieveAll({"members":userId["token"]})
     for room in rooms:
-        print("room+++++++++++++++",room)
         join_room(str(room["_id"]))
              
     #print("TODO")
@@ -41,6 +42,11 @@ def getAllMessages(roomId):
 def addUserToRoom(roomId,userId):
     mydb.addUserToRoom(roomId,userId)
     print(f"adding {userId} to the room with ID {roomId}")
+
+
+@app.route('/<username>')
+def retriveAllRooms(username):
+    mydb.retrieveAll({"username":username})
 
 #event handler to remove  user from a certain room 
 @socketio.on('removeUser')
