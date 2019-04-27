@@ -48,7 +48,7 @@ def getUserRooms(user):
     rooms = mydb.getAllRoomsOfUser(user.name)
     return jsonify({"data": rooms})
 
-@app.route('/user/rooms')
+@app.route('/user/created-rooms')
 @user_required()
 def getCreatedRooms(user):
     '''
