@@ -24,11 +24,16 @@ class DBManager:
         self.db.my_collection.insert_one({"roomName":roomName,"members":[userId],"creator":userId,"messages":[]})    
         
     def addUserToRoom(self,roomID,userID):
-        self.db.my_collection.update({'_id': roomID}, {'$addToSet': {'members': [userID]}})   
+        self.db.my_collection.update({'_id': roomID}, {'$addToSet': {'members': userID}})   
     def insertSID(self,userId,SID):
         self.db.my_collection.insert_one({"userId":userId,"SID":SID})
     def updateSID(self,userId,SID):
         self.db.my_collection.update({"userId":userId},{'$set':{'SID':SID}})   
+    def updateSIDUsingSID(self,SID):
+        SID=self.db.my_collection.find_one({"SID":SID})
+        if(SID!=None):
+            self.updateSID(SID["userId"],"")
+        print (SID)
     def addMessageToRoom(self,roomId,userId,message):
         self.db.my_collection.update({'_id': roomId}, {'$addToSet': {'messages': {"message":message,"owner":userId}}})
     def getAllMessagesOfRoom(self,roomId):
@@ -73,7 +78,7 @@ class DBManager:
 if __name__ == "__main__":
     dbmanager = DBManager("ChatDB")
     response=dbmanager.retrieveOne({"roomName":"room2"})
-    dbmanager.addUserToRoom(response["_id"],"userId5")
+    dbmanager.addUserToRoom(response["_id"],"userId7")
     dbmanager.updateSID("userId6","")
     dbmanager.addMessageToRoom(response["_id"],"userId3","Hey userId4")
     rooms=dbmanager.retrieveAll({"members":"userId4"})
@@ -83,5 +88,6 @@ if __name__ == "__main__":
     #dbmanager.createRoom("room2","loaiAli")
     #print(type(response["_id"]))
     dbmanager.addMessageToRoom(ObjectId("5cc39717f7df3645f8b65cc4"),"loaiAli2","eshm3na ba2a3")
-    print(dbmanager.getAllRoomsOfUser("loaiAli"))
-    print(dbmanager.retrieveAll({"members":"loaiAli"}))
+    #print(dbmanager.getAllRoomsOfUser("loaiAli"))
+    #print(dbmanager.retrieveAll({"members":"loaiAli"}))
+    #print(dbmanager.updateSIDUsingSID("aa95ddb6692d469d8743c7304196c899"))

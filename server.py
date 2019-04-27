@@ -30,17 +30,17 @@ def signIn(userId):
              
     #print("TODO")
 
-@app.route('/roomchat/{roomId}')
+@app.route('/roomchat/<roomId>')
 def getAllMessages(roomId):
-    
     messages=mydb.getAllMessagesOfRoom(roomId)
     return messages
     #socketio.emit('showAllMessages',messages,room=roomID)
 #event handler to adding a user to a certain room 
-@socketio.on('addUser')
-def addUserToRoom(userID,roomID):
-    mydb.addUserToRoom(roomID,userID)
-    print(f"adding {userID} to the room with ID {roomID}")
+#@socketio.on('addUser')
+@app.route('/<roomId>/new-user/<userId>')
+def addUserToRoom(roomId,userId):
+    mydb.addUserToRoom(roomId,userId)
+    print(f"adding {userId} to the room with ID {roomId}")
 
 #event handler to remove  user from a certain room 
 @socketio.on('removeUser')
@@ -54,7 +54,6 @@ def removeUser(userId,roomId):
 @socketio.on('createRoom')
 def createRoom(roomName,userId):
     print(f"creating room with name {roomName}")
-    
     mydb.createRoom(roomName,userId)
     
 
@@ -63,10 +62,15 @@ def createRoom(roomName,userId):
 @socketio.on('leaveRoom')
 def leaveRoom(userId,roomId):
     mydb.removeUserfromRoom(userId,roomId)
-    leave_room(roomId)   
+    leave_room(roomId)
     print(f"leaving from the room with {roomId}")
 
 
+@socketio.on('disconnect')
+def disconnect():
+    SID=request.sid
+    mydb.updateSIDUsingSID(SID)
+    
 
 
 @socketio.on('sendMessage')
