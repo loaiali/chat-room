@@ -1,30 +1,107 @@
-<div class="container bootstrap snippet">
-  <div class="row">
-    <div class="col-md-4 col-md-offset-4">
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+          <title>{{__getTitle()}} Room</title>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+          <link rel="stylesheet" href="chat-room.component.css">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+          <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+    </head>
+
+<body>
+  
+
+
+
+<div class="container-fluid">
+
+
+
+  <div class="row titleClass" >
+
+        <div class="col" style="display:inline-block;">
+          <h1 style="display:inline-block;">{{_getTitle()}}</h1>
+          <i style='font-size:30px; display:inline-block;' class='far'>&#xf075;</i>
+        </div>
+
+        <div class="col" style="display:inline-block; float: right; padding: 15px;" >
+              <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" ><i style="align:center; font-size:30px" class="fa">&#xf013;</i></button>
+             <button (click)="_onLeaveRoomClicked()" class="btn btn-danger btn-lg">Leave Room</button>
+        </div>
+  </div>
+
+
+
+
+
+  <div style="margin:10px;">
+
+
+          
+  
       <div class="portlet portlet-default">
         <div class="portlet-heading">
           <div class="clearfix"></div>
         </div>
-        <div>
-          <h2> {{_getTitle()}}</h2>
-          <label> enter the name of the user you want to add or remove from this chat room</label>
-          <input [(ngModel)]="_inputUser" />
-          <button (click)="_onAddUserClicked()">add user</button>
-          <button (click)="_onRemoveUserClicked()">remove user</button>
-          <button (click)="_onLeaveRoomClicked()">leave this room</button>
-        </div>
+        
+
         <div id="chat" class="panel-collapse collapse in">
           <div>
-            <div class="portlet-body chat-widget" style="overflow-y: auto; width: auto; height: 300px;">
+            <div class="portlet-body chat-widget" style="overflow-y: auto; width: auto; height: 810px; ">
 
               <app-chat-message *ngFor="let message of messages" [message]="message"> </app-chat-message>
             </div>
           </div>
-          <!-- send message -->
-          <input [(ngModel)]="_inputMessage" (keyup)="$event.keyCode == 13 && _onSendClicked()" />
-          <button (click)="_onSendClicked()">Send</button>
+
+          <div class = "container-fluid" style="float: bottom; margin:5px; width:100%; ">
+            <!-- send message -->
+            <input [(ngModel)]="_inputMessage" (keyup)="$event.keyCode == 13 && _onSendClicked()" style=" height:50px; width:95%;" />
+            <button (click)="_onSendClicked()" class="btn btn-danger btn-lg" >Send</button>
+          </div>
+
+
         </div>
-      </div>
     </div>
+
+
   </div>
 </div>
+
+
+ <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">{{__getTitle}} Room Settings</h4>
+        </div>
+        <div class="modal-body">
+          
+            <div>
+              
+              <!-- <label> enter the name of the user you want to add or remove from this chat room</label>-->
+              <input [(ngModel)]="_inputUser"  size="30" style="height:45px;" />
+              <button (click)="_onAddUserClicked()" class="btn btn-success btn-lg">Add User</button>
+              <button (click)="_onRemoveUserClicked()" class="btn btn-danger btn-lg">Remove User</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+
+</body>
+</html>

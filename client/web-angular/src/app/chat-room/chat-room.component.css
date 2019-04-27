@@ -170,3 +170,14 @@ height:40px;
 .text-red {
     color: #e74c3c;
 }       
+
+
+.titleClass{
+    background: darkred;
+    padding: 15px 40px;
+    color: #ffffff;
+}
+
+h1{
+    font-family: Arial, Charcoal, sans-serif;
+}
