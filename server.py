@@ -1,6 +1,7 @@
 from flask import Flask, render_template,request
 from flask_socketio import SocketIO,join_room,leave_room
 from dbmanager import DBManager
+from bson import ObjectId
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'loaiAli'
 socketio = SocketIO(app)
@@ -19,11 +20,14 @@ def handleMain():
 
 @socketio.on('signedIn')
 def signIn(userId):
+    print(f"Entered signed in with id {userId}")
     SID=request.sid
-    mydb.updateSID(userId,SID)
-    rooms=mydb.retrieveAll({"members":userId})
+    mydb.updateSID(userId["token"],SID)
+    rooms=mydb.retrieveAll({"members":userId["token"]})
     for room in rooms:
-        join_room(room["_id"])     
+        print("room+++++++++++++++",room)
+        join_room(str(room["_id"]))
+             
     #print("TODO")
 
 @app.route('/roomchat/{roomId}')
@@ -66,9 +70,11 @@ def leaveRoom(userId,roomId):
 
 
 @socketio.on('sendMessage')
-def sendMessage(roomId,userId,message):
-    socketio.emit('show-message',message,room=roomId,include_self=False)
-    mydb.addMessageToRoom(roomId,userId,message)
+def sendMessage(dictReq):
+    print(f"sending message at {dictReq}")
+    mydb.addMessageToRoom(ObjectId(dictReq["room"]),dictReq["username"],dictReq["content"])
+    socketio.emit('show-message',dictReq["content"],room=dictReq["room"],include_self=True)
+    
 
 
 
