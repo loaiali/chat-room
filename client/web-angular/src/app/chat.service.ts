@@ -46,28 +46,49 @@ export class ChatService {
     });
   }
 
-  public recOldMessages = () => {
-
-    return Observable.create((observer) => {
-      this.socket.on('new-message', (message) => {
-
-        observer.next(message);
-      });
-    });
-  }
-
-  public setRoomTo(roomId: String) {
-    this.currRoom = Observable.create((observer) => {
-      observer.next(roomId)
-    })
-  }
-
   /**
    * return old chats of current room
    */
   public getChats() {
     return Observable.create((observer) => {
-      this.http.get(`http://localhost:3000/${this.currRoom || "room1"}/chats`, {
+      // TODO: remove simulation
+      setInterval(() => {
+        const m = [
+          {
+            "content": "mes1",
+            "name": "ammar",
+          },
+          {
+            "content": "mes2",
+            "name": "loai",
+          },
+          {
+            "content": "mes3",
+            "name": "samir",
+          },
+        ]
+        // observer.next(m)
+      }, 6000)
+      // this.http.get(`http://localhost:3000/${this.currRoom || "room1"}/chats`, {
+      //   params: {
+      //     token: 'kldmflkmsdlkfmdfmdmsldkfmlsdmfsd'
+      //   },
+      //   observe: 'response'
+      // }).toPromise().then(response => {
+      //   console.log(response);
+      //   observer.next(response)
+      //   observer.complete()
+      // }).catch(observer.error);
+    });
+  }
+
+  /**
+   * return user subscribed rooms
+   */
+  public getSubscribedRooms() {
+    return Observable.create((observer) => {
+      observer.next([{ name: "room1", "lastMessage": "ok, that will be great" }, { "lastMessage": "thanks", name: "room2" },])
+      this.http.get(`${this.url}/${this.currUser}/rooms`, {
         params: {
           token: 'kldmflkmsdlkfmdfmdmsldkfmlsdmfsd'
         },
@@ -78,6 +99,35 @@ export class ChatService {
         observer.complete()
       }).catch(observer.error);
     });
+  }
+
+  public removeUser(room, user) {
+    Observable.create((observer) => {
+      // TODO: remove fake ack
+      observer.next("removed")
+      this.http.get(`${this.url}/${room}/del-user/${user}`, {
+        params: {
+          token: 'kldmflkmsdlkfmdfmdmsldkfmlsdmfsd'
+        },
+        observe: 'response'
+      }).toPromise().then((res) => {
+        observer.next(res)
+      }).catch(observer.error)
+    })
+  }
+  public addUser(room, newUser) {
+    Observable.create((observer) => {
+      // TODO: remove fake ack
+      observer.next("added")
+      this.http.get(`${this.url}/${room}/new-user/${newUser}`, {
+        params: {
+          token: 'kldmflkmsdlkfmdfmdmsldkfmlsdmfsd'
+        },
+        observe: 'response'
+      }).toPromise().then((res) => {
+        observer.next(res)
+      }).catch(observer.error)
+    })
   }
 
   private nowStr() {
