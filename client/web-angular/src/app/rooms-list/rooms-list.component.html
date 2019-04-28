@@ -1,5 +1,7 @@
-<ul> 
-  <li *ngFor="let room of rooms" (click)="roomClicked(room)" >
+<div class="col-lg-2">
+
+  <ul> 
+    <li *ngFor="let room of rooms" (click)="roomClicked(room)" >
       {{room.roomName}}
       {{room.lastMessage}}
   </li>
@@ -7,3 +9,4 @@
 
 <input [(ngModel)]="_inputRoomName">
 <button (click)="_createNewRoomClicked()">create new room</button>
+</div>
