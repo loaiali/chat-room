@@ -25,36 +25,39 @@ class DBManager:
         return self.db.my_collection.insert_one({"roomName":roomName,"members":[userId],"creator":userId,"messages":[]})    
         
     def addUserToRoom(self,roomID,userID):
-        self.db.my_collection.update({'_id': roomID}, {'$addToSet': {'members': userID}})   
+        self.db.my_collection.update({'_id': ObjectId(roomID)}, {'$addToSet': {'members': userID}})   
     
     
-    def insertUser(self,username,password,email,SID):
-        return self.db.my_collection.insert_one({"username":username,"password":password,"email":email,"SID":SID})
+    def insertUser(self,username,password,email,SID = ""):
+        try:
+            return self.db.my_collection.insert_one({"_id":username,"password":password,"email":email,"SID":SID}).inserted_id
+        except pymongo.errors.DuplicateKeyError:
+            return ""
     
     
     def updateSID(self,username,SID):
-        self.db.my_collection.update({"username":username},{'$set':{'SID':SID}})   
+        self.db.my_collection.update({"_id":username},{'$set':{'SID':SID}})   
     
     
-    def updateSIDUsingSID(self,SID):
+    def removeSID(self, SID):
         SID=self.db.my_collection.find_one({"SID":SID})
         if(SID!=None):
             self.updateSID(SID["username"],"")
     
     
-    def addMessageToRoom(self,roomId,username,message,date):
-        self.db.my_collection.update({'_id': roomId}, {'$push': {'messages': {"message":message,"owner":username,"date":date}}})
+    def addMessageToRoom(self,roomId,username,message):
+        self.db.my_collection.update({'_id': ObjectId(roomId)},{'$push': {'messages': {**message, "owner":username}}})
     
     
     def getAllMessagesOfRoom(self,roomId):
-        room=self.db.my_collection.find_one({"_id":roomId})
+        room = self.db.my_collection.find_one({"_id":ObjectId(roomId)})
         return {"messages":room["messages"],"roomName":room["roomName"]}
     
     
     #key will be like
     # {"key": value}
     def retrieveOne(self, key):
-    	return self.db.my_collection.find_one(key)  
+    	return self.db.my_collection.find_one(key)
     
     
     #key will be like

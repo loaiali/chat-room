@@ -13,7 +13,6 @@ def user_required():
         @wraps(fn)
         def decorated(*args, **kwargs):
             error = None
-            setattr
             if 'x-access-token' in request.headers:
                 token = request.headers['x-access-token']
                 try:
@@ -26,6 +25,30 @@ def user_required():
                 return error
             currUser = User(data["username"], data["password"])
             return fn(currUser, *args, **kwargs)
+        decorated.__name__ = "{}_{}".format(decorated.__name__, fn.__name__)
+        return decorated
+    return wrapper
+
+
+
+from app import io
+from flask_socketio import emit
+def auth_required():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated(data, *args, **kwargs):
+            try:
+                print("decorated in auth_required", data, *args)
+                token = data["token"]
+                print("decorated in auth_required", token)
+                userData = jwtDecode(token, app_secret_key)
+                currUser = User(username = userData["username"])
+                del data["token"]
+            except Exception as e:
+                print("auth_required: a user tried to send message without valid auth")
+                print(e, type(e))
+                emit("Error", {"mes": "invalid auth"}, broadcast=False)
+            return fn(currUser, data, *args, **kwargs)
         decorated.__name__ = "{}_{}".format(decorated.__name__, fn.__name__)
         return decorated
     return wrapper
