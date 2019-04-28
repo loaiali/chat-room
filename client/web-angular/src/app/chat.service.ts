@@ -84,7 +84,13 @@ export class ChatService {
   }
 
   public removeUser(room, user) {
-    Observable.create((observer) => {
+    const fullMessage={
+      token:this.currToken(),
+      userId:user,
+      roomId:room
+    }
+    this.socket.emit("removeUser",fullMessage)
+    /*Observable.create((observer) => {
       // TODO: remove fake ack
       observer.next("removed")
       this.http.get(`${this.url}/${room}/del-user/${user}`, {
@@ -95,10 +101,19 @@ export class ChatService {
       }).toPromise().then((res) => {
         observer.next(res)
       }).catch(observer.error)
-    })
+    })*/
   }
   public addUser(room, newUser) {
-    Observable.create((observer) => {
+    console.log(newUser)
+    const fullMessage={
+      token:this.currToken(),
+      userId:newUser,
+      roomId:room
+    }
+    this.socket.emit("addUser",fullMessage)
+    
+    
+    /*Observable.create((observer) => {
       // TODO: remove fake ack
       observer.next("added")
       this.http.get(`${this.url}/${room}/new-user/${newUser}`, {
@@ -109,16 +124,22 @@ export class ChatService {
       }).toPromise().then((res) => {
         observer.next(res)
       }).catch(observer.error)
-    })
+    })*/
   }
 
   public leaveRoom(room) {
-    Observable.create((observer) => {
+    console.log("leaving room",room)
+    const fullMessage={
+      token:this.currToken(),
+      "roomId":room
+    }
+    this.socket.emit("leaveRoom", fullMessage)    
+    /*Observable.create((observer) => {
       // TODO: remove fake ack
-      this.socket.emit("leaveRoom", room)
+      this.socket.emit("leaveRoom", fullMessage)
       observer.next("leaved")
       observer.complete()
-    })
+    })*/
   }
 
   public createNewRoom(name) {

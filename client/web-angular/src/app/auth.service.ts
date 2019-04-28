@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http'
-import base64 from 'base-64'
-
+import { Base64 } from 'js-base64';
 
 export interface UserType {
   name: String;
@@ -35,7 +34,7 @@ export class AuthService {
     return Observable.create((observer) => {
       this.http.get(`${this.url}/login`, {
         headers: {
-          "Authorization": `Basic ${base64.encode(`${username}:${password}`)}`,
+          "Authorization": `Basic ${Base64.encode(`${username}:${password}`)}`,
         },
         observe: 'response'
       }).toPromise().then((res) => {

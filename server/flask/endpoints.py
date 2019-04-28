@@ -1,6 +1,6 @@
 from app import app, db as mydb
 from flask import render_template, jsonify, request
-from wrappers import user_required
+from wrappers import user_required,auth_required
 import jwt
 import datetime
 from cors import crossdomain, cors_enabled
@@ -41,7 +41,9 @@ def getRoomInfo(user, roomId):
     roomInfo = mydb.getAllMessagesOfRoom(roomId)
     return jsonify({"data": roomInfo})
 
+
 #? TODO: this should be socket.io
+'''
 @app.route('/rooms/<roomId>/new-user/<userId>')
 @cross_origin()
 @user_required()
@@ -50,7 +52,7 @@ def addUserToRoom(user, roomId, userId):
     mydb.addUserToRoom(roomId,userId)
     print(f"adding {userId} to the room with ID {roomId}")
     return jsonify({"mes": "new user is added successfully"})
-
+'''
 @app.route("/rooms", methods=['post'])
 @cross_origin()
 @user_required()
@@ -82,3 +84,9 @@ def getCreatedRooms(user):
     print(user.name)
     rooms = mydb.retrieveAll({"creator":user.name})
     return jsonify({"data": rooms})
+
+@app.route('/<roomId>/users')
+@user_required()
+def getUsersOfRooms(user,roomId):
+    print(f"getting users of room with Id {roomId}")
+    return jsonify({"users":mydb.getUsersOfRoom(roomId)})

@@ -19,23 +19,25 @@ def signedIn(user, data):  # tested = true
         print(f"joining user {user.name} to room {room['_id']}")
         join_room(room["_id"])
 
-
 #event handler to remove  user from a certain room
 @socketio.on('removeUser')
 @auth_required()
 def removeUser(user, data):
-    userIdToRemove = data["userId"]
-    roomId = data["roomId"]
-    currUserId = user.name
+    userIdToRemove=data["userId"]
+    roomId=data["roomId"]
+    print(type(user),userIdToRemove,roomId)
+    print(f"removing {userIdToRemove} From {roomId}++++++++++++++++++++++++++")
+    currUserId =user.name
     if not isRoomOwner(currUserId, roomId):
         print(
             f"[AUTH WARN]: user {currUserId} tried to remove user from room he is not the owner of it"
         )
         return
     userSIDToRemove = mydb.getUserSID(userIdToRemove)
-    print(f"removing {userIdToRemove} from {roomId}")
+    socketio.emit("UserRemoved",{"UserId":userIdToRemove},room=str(roomId))    
     if userSIDToRemove != "":
         leave_room(roomId, sid=userSIDToRemove)
+    
     mydb.removeUserfromRoom(userIdToRemove, roomId)
 
 
@@ -54,22 +56,29 @@ def addUserToRoom(user, data):
 
     targetUserSID = mydb.getUserSID(targetUserId)
     print(f"adding {targetUserSID} to {roomId}")
-    join_room(roomId, sid=targetUserSID)
-
+    
+    #emit to the room members that a new member has joined the room
+    socketio.emit("UserJoined",{"UserId":targetUserId},room=str(roomId))
+    #emit to the added User to refresh his page if he is online 
+    if targetUserSID!="":
+        socketio.emit("newRoom","",room=targetUserSID)
+        join_room(roomId, sid=targetUserSID)
+    
 
 #event handler to make a certain user leave a room
 @socketio.on('leaveRoom')
 @auth_required()
 def leaveRoom(userId, roomId):
-    mydb.removeUserfromRoom(userId, roomId)
-    leave_room(roomId)
     print(f"leaving from the room with {roomId}")
+    mydb.removeUserfromRoom(userId.name, roomId["roomId"])
+    socketio.emit("UserRemoved",{"UserId":userId.name},room=str(roomId))
+    leave_room(roomId["roomId"])
+    
 
 
 @socketio.on('disconnect')
-def disconnect():
+def disconnectClient():
     SID = request.sid
-    print("disconnect: ", SID)
     mydb.removeSID(SID)
 
 

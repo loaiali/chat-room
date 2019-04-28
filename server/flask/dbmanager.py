@@ -41,8 +41,9 @@ class DBManager:
     
     def removeSID(self, SID):
         SID=self.db.my_collection.find_one({"SID":SID})
+        print("SID=+++++++++++ ",SID)
         if(SID!=None):
-            self.updateSID(SID["username"],"")
+            self.updateSID(SID["_id"],"")
     
     
     def addMessageToRoom(self,roomId,username,message):
@@ -84,7 +85,14 @@ class DBManager:
     def deleteOne(self, key):
     	self.db.my_collection.delete_one(key)   
     
-    
+    def getUsersOfRoom(self,roomID):
+        #users=[]
+        
+        #cursor =self.db.my_collection.find()
+        room=self.db.my_collection.find_one({"_id":ObjectId(roomID)})
+        return room["members"]
+
+
     #key and update will be like
     # {"key": value}
     
@@ -94,11 +102,15 @@ class DBManager:
 
     
     def getUserSID(self,userId):
-        return self.db.my_collection.find_one({"userId":userId})
-    
+        print(type(userId),userId,"++++++++++++++++")
+        SID= self.db.my_collection.find_one({"_id":userId},{"_id":0,"SID":1})
+        return SID["SID"]
     
     def removeUserfromRoom(self,userId,roomId):
-        self.db.my_collection.update({'_id':roomId},{'$pull':{"members":userId}})
+        #print(type(userId.name))
+        #print(roomInfo["roomId"])
+        print(type(userId),userId,type(roomId),roomId)
+        self.db.my_collection.update({'_id':ObjectId(roomId)},{'$pull':{"members":userId}})
 
 
 if __name__ == "__main__":
@@ -107,9 +119,11 @@ if __name__ == "__main__":
     dbmanager.addUserToRoom(response["_id"],"userId7")
     #dbmanager.insertUser("loaiAli2","HelloWorld","imfunky505@ymail.com","")
     #dbmanager.updateSID("loaiAli2","hello2")
-    dbmanager.updateSIDUsingSID("hello2")
-    print(dbmanager.getAllMessagesOfRoom(ObjectId("5cc39717f7df3645f8b65cc4")))
-    #dbmanager.updateSID("userId6","")
+    #dbmanager.updateSIDUsingSID("hello2")
+    #dbmanager.removeSID("8ee2356fbbde4b15aa720c6e728e3077")
+    print(dbmanager.getUsersOfRoom("5cc5ee3af7df361500e45c30"))
+    #print(dbmanager.getAllMessagesOfRoom(ObjectId("5cc39717f7df3645f8b65cc4")))
+    #  dbmanager.updateSID("userId6","")
     #dbmanager.addMessageToRoom(response["_id"],"userId3","Hey userId4")
     #rooms=dbmanager.retrieveAll({"members":"userId4"})
     #print(dbmanager.getUserSID("userId6"))

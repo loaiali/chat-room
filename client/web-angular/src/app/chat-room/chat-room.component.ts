@@ -68,12 +68,12 @@ export class ChatRoomComponent implements OnInit {
   }
 
   _onAddUserClicked() {
-    this._inputUser = ''
+    //this._inputUser = ''
     this.chatService.addUser(this.roomId, this._inputUser)
   }
 
   _onRemoveUserClicked() {
-    this._inputUser = ''
+    //this._inputUser = ''
     this.chatService.removeUser(this.roomId, this._inputUser)
   }
 
