@@ -18,7 +18,7 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSignUpClicked() {
+  _onSignUpClicked() {
     const info = {
       "name": this._inputUsername,
       "email": this._inputEmail,

@@ -55,19 +55,18 @@ export class AuthService {
 
   public signup(userInfo: UserInfoType) {
     return Observable.create((observer) => {
-      fetch(`${this.url}/signup`, {
-        method: 'POST',
-        body: JSON.stringify(userInfo),
-      }).then((res) => {
-        if (res.ok) {
-          res.json().then((data) => {
-            this.user.token = data.token
-            this.user.name = userInfo.name
-            observer.next(true)
-          })
-        }
-        else
+      this.http.post(`${this.url}/signup`, userInfo, {
+        observe: 'response'
+      }).toPromise().then((res) => {
+        console.log(res)
+        if (!res.ok) {
           observer.next(false)
+        }
+        else {
+          this.user.token = res.body["token"]
+          this.user.name = userInfo.name
+          observer.next(true)
+        }
         observer.complete()
       }).catch(observer.error)
     })
