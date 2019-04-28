@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: "", component: LoginComponent},
   { path: "signup", component: SignupComponent},
   { path: "rooms/:room", component: ChatMainComponent},
+  { path: "rooms", component: ChatMainComponent},
 
 ];
 

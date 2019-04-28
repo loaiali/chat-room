@@ -33,21 +33,21 @@ export class AuthService {
 
   public login(username: String, password: String) {
     return Observable.create((observer) => {
-      fetch(`${this.url}/login`, {
-        method: 'GET',
+      this.http.get(`${this.url}/login`, {
         headers: {
-          "Authorization": `Basic ${base64.encode(`${username}:${password}`)}`
-        }
-      }).then((res) => {
-        if (res.ok){
-          res.json().then((data)=>{
-            this.user.token = data.token
-            this.user.name = username
-            observer.next(true)
-          })
-        }
-        else
+          "Authorization": `Basic ${base64.encode(`${username}:${password}`)}`,
+        },
+        observe: 'response'
+      }).toPromise().then((res) => {
+        console.log(res)
+        if (!res.ok) {
           observer.next(false)
+        }
+        else {
+          this.user.token = res.body["token"]
+          this.user.name = username
+          observer.next(true)
+        }
         observer.complete()
       }).catch(observer.error)
     })
@@ -59,8 +59,8 @@ export class AuthService {
         method: 'POST',
         body: JSON.stringify(userInfo),
       }).then((res) => {
-        if (res.ok){
-          res.json().then((data)=>{
+        if (res.ok) {
+          res.json().then((data) => {
             this.user.token = data.token
             this.user.name = userInfo.name
             observer.next(true)

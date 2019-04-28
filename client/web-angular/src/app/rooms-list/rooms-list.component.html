@@ -1,6 +1,9 @@
 <ul> 
   <li *ngFor="let room of rooms" (click)="roomClicked(room)" >
-      {{room.name}}
+      {{room.roomName}}
       {{room.lastMessage}}
   </li>
 </ul>
+
+<input [(ngModel)]="_inputRoomName">
+<button (click)="_createNewRoomClicked()">create new room</button>

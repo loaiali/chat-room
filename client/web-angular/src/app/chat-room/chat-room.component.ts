@@ -6,16 +6,15 @@ import { ChatService } from '../chat.service';
 @Component({
   selector: 'app-chat-room',
   templateUrl: './chat-room.component.html',
-  styleUrls: ['./chat-room.component.css']
+  styleUrls: ['./chat-room.component.css',]
 })
 export class ChatRoomComponent implements OnInit {
   messages = []
   _inputMessage: String
   _inputUser: String
+  roomName: String
   roomId: String
   constructor(private chatService: ChatService, private route: ActivatedRoute) {
-    // TODO: we have to get this value in observable input from the chat service or something like that
-
     this.roomId = "room1"
   }
 
@@ -29,11 +28,21 @@ export class ChatRoomComponent implements OnInit {
       username: "Application developers",
       time: this.nowStr(),
     })
+
+    this.chatService.getChats(this.roomId).subscribe((roomInfo) => {
+      console.log("getChats subscription received")
+      const chats = roomInfo.messages
+      chats.forEach(chat => {
+        this.messages.push(chat)
+      });
+      this.roomName = roomInfo.roomName
+    })
+
   }
 
   _onSendClicked() {
     console.log(`user typed '${this._inputMessage}' and pressed send button`)
-    const fullMessage = this.chatService.sendNewMessage(this._inputMessage)
+    const fullMessage = this.chatService.sendNewMessage(this._inputMessage, this.roomId)
     this.messages.push(fullMessage)
     this._inputMessage = ''
   }
@@ -43,13 +52,6 @@ export class ChatRoomComponent implements OnInit {
       this.roomId = params.get("room")
       this.messages = []
       this.load()
-    })
-
-    this.chatService.getChats().subscribe((chats) => {
-      console.log("getChats subscription recieved", chats)
-      chats.forEach(chat => {
-        this.messages.push(chat)
-      });
     })
 
     this.chatService
@@ -65,21 +67,21 @@ export class ChatRoomComponent implements OnInit {
     return time
   }
 
-  _onAddUserClicked(){
+  _onAddUserClicked() {
     this._inputUser = ''
     this.chatService.addUser(this.roomId, this._inputUser)
   }
-  
-  _onRemoveUserClicked(){
+
+  _onRemoveUserClicked() {
     this._inputUser = ''
     this.chatService.removeUser(this.roomId, this._inputUser)
   }
 
-  _onLeaveRoomClicked(){
+  _onLeaveRoomClicked() {
     this.chatService.leaveRoom(this.roomId)
   }
 
   _getTitle() {
-    return this.roomId
+    return this.roomName
   }
 }

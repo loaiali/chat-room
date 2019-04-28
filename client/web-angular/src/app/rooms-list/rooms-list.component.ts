@@ -9,8 +9,10 @@ import { ChatService } from '../chat.service';
 })
 export class RoomsListComponent implements OnInit {
   public rooms = []
+  _inputRoomName: String
+
   constructor(private readonly router: Router, private chatService: ChatService) {
-    chatService.getSubscribedRooms().subscribe((rooms) => {
+    this.chatService.getSubscribedRooms().subscribe((rooms) => {
       this.rooms = rooms
     })
   }
@@ -20,6 +22,13 @@ export class RoomsListComponent implements OnInit {
   }
 
   public roomClicked(room){
-    this.router.navigate(["rooms", room.name]);
+    console.log("room clicked", room['_id'])
+    this.router.navigate(["rooms", room['_id']]);
+  }
+
+  public _createNewRoomClicked(){
+    this.chatService.createNewRoom(this._inputRoomName).subscribe((newRoom) => {
+      this.rooms.push(newRoom)
+    })
   }
 }
