@@ -1,6 +1,6 @@
-.portlet {
+/* .portlet {
     margin-bottom: 15px;
-}
+} */
 
 .btn-white {
     border-color: #cccccc;
@@ -8,16 +8,16 @@
     background-color: #ffffff;
 }
 
-.portlet {
-    border: 1px solid;
-}
+/* .portlet {
+    border: 2px solid;
+} */
 
-.portlet .portlet-heading {
+ .portlet-heading {
     padding: 0 15px;
 }
 
 .portlet .portlet-heading h4 {
-    padding: 1px 0;
+    /* padding: 1px 0; */
     font-size: 16px;
 }
 
@@ -43,7 +43,7 @@
     float: left;
 }
 
-.portlet .portlet-heading .portlet-title h4 {
+ .portlet-heading .portlet-title h4 {
     margin: 10px 0;
 }
 
@@ -56,9 +56,9 @@
     display: inline;
 }
 
-.portlet .portlet-heading .portlet-widgets .divider {
+/* .portlet .portlet-heading .portlet-widgets .divider {
     margin: 0 5px;
-}
+} */
 
 .portlet .portlet-body {
     padding: 15px;
@@ -66,7 +66,7 @@
 }
 
 .portlet .portlet-footer {
-    padding: 10px 15px;
+    /* padding: 10px 15px; */
     background: #e0e7e8;
 }
 
@@ -173,9 +173,19 @@ height:40px;
 
 
 .titleClass{
-    background: darkred;
-    padding: 15px 40px;
+    background: #231942;
+    border-color: #F6E27F; 
+    border-bottom-style: double;
+    border-width: 5px;
+    padding: 5px 25px;
     color: #ffffff;
+    
+}
+
+button{
+    margin:5px;
+    color: white;
+    background-color: #64376D;
 }
 
 h1{
