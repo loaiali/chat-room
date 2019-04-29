@@ -22,12 +22,6 @@ export class ChatRoomComponent implements OnInit {
    * load the chat room after change in the room id
    */
   private load() {
-    this.messages.push({
-      content: "Hi, this the default chat message",
-      date: Date.now().toString(),
-      username: "Application developers",
-      time: this.nowStr(),
-    })
 
     this.chatService.getChats(this.roomId).subscribe((roomInfo) => {
       console.log("getChats subscription received")
