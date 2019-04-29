@@ -98,7 +98,7 @@ def sendMessage(user, data):  # tested = true
     print(f"message received from {user.name}: {data}")
     # TODO: make sure that this user is in this room
     roomId = ObjectId(data["room"])
-    del data["room"]
+    # del data["room"]
     mydb.addMessageToRoom(roomId, user.name, data)
     data["user"] = user.name
     print(f"emitting to {str(roomId)} {data}")

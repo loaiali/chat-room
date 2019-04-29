@@ -30,6 +30,12 @@ export class RoomsListComponent implements OnInit {
       });
 
     this.chatService
+      .recNewRoom()
+      .subscribe((data) => {
+        this.rooms.push(data)
+      });
+
+    this.chatService
       .recUserHasRemoved()
       .subscribe((data) => {
         this.rooms.forEach((room, i) => {

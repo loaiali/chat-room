@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 export class ChatService {
   // url of the server
   // private url = 'http://localhost:53546';
-  private url = 'http://localhost:5000';
+  private url = 'http://192.168.43.231:5000';
   private socket;
   public currUser: String;
 
@@ -51,6 +51,15 @@ export class ChatService {
     return Observable.create((observer)=>{
       this.socket.on('UserJoined',(message)=>{
         console.log("new User joined this room",message)
+        observer.next(message);
+      });
+    });
+  }
+
+  public recNewRoom=()=>{
+    return Observable.create((observer)=>{
+      this.socket.on('newRoom',(message)=>{
+        console.log("new room for current user",message)
         observer.next(message);
       });
     });
@@ -146,18 +155,13 @@ export class ChatService {
   }
 
   public leaveRoom(room) {
-    console.log("leaving room",room)
-    const fullMessage={
-      token:this.currToken(),
-      "roomId":room
-    }
-    this.socket.emit("leaveRoom", fullMessage)    
-    /*Observable.create((observer) => {
-      // TODO: remove fake ack
-      this.socket.emit("leaveRoom", fullMessage)
-      observer.next("leaved")
-      observer.complete()
-    })*/
+    return this.removeUser(room, this.authService.getCurrUser().name)
+    // console.log("leaving room",room)
+    // const fullMessage={
+    //   token:this.currToken(),
+    //   "roomId":room
+    // }
+    // this.socket.emit("leaveRoom", fullMessage)
   }
   
 
