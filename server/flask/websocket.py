@@ -45,6 +45,8 @@ def removeUser(user, data):
 @auth_required()
 def addUserToRoom(user, data):
     roomId = data["roomId"]
+    roomInfo=mydb.getAllMessagesOfRoom(roomId)
+    #print(roomInfo)
     targetUserId = data["userId"]
     if not isRoomOwner(user.name, roomId):
         print(
@@ -61,7 +63,7 @@ def addUserToRoom(user, data):
     socketio.emit("UserJoined",{"UserId":targetUserId},room=str(roomId))
     #emit to the added User to refresh his page if he is online 
     if targetUserSID!="":
-        socketio.emit("newRoom","",room=targetUserSID)
+        socketio.emit("newRoom",{"roomInfo":roomInfo},room=targetUserSID)
         join_room(roomId, sid=targetUserSID)
     
 

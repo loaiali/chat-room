@@ -8,7 +8,7 @@
 
                 <div class="col" style="display:inline-block; float: left;">
                     <h1 style="display:inline-block;padding:5px;">{{_getTitle()}}</h1>
-                    <i style='font-size:20px; display:inline-block;' class='far'>&#xf075;</i>
+                    <i style='font-size:20px;' [style.display]="roomId ? 'inline-block' : 'none'" class='far'>&#xf075;</i>
                 </div>
 
                 <div class="col" style="display:inline-block; float: right; padding: 15px;">
@@ -19,10 +19,13 @@
 
             <div class="row">
 
+            
+
                 <div class="portlet portlet-default col-lg-10">
                     <div class="portlet-heading">
                         <div class="clearfix"></div>
                     </div>
+                    <h1 [style.display]="roomId ? 'none' : 'inline-block'"> No rooms is opened</h1>
 
                     <div id="chat" class="panel-collapse collapse in">
                         <div>
@@ -34,8 +37,8 @@
 
                         <div style="float: bottom; ">
                             <!-- send message -->
-                            <input [(ngModel)]="_inputMessage" (keyup)="$event.keyCode == 13 && _onSendClicked()" style=" height:50px; width:90%;" />
-                            <button (click)="_onSendClicked()" class="btn btn-lg">Send</button>
+                            <input [(ngModel)]="_inputMessage" [style.display]="roomId ? 'inline-block' : 'none'" (keyup)="$event.keyCode == 13 && _onSendClicked()" style=" height:50px; width:90%;" />
+                            <button (click)="_onSendClicked()" [style.display]="roomId ? 'inline-block' : 'none'" style="" class="btn btn-lg">Send</button>
                         </div>
                     </div>
                 </div>
