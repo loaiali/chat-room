@@ -32,7 +32,7 @@ def removeUser(user, data):
         print("removing already removed", existingUsers)
         return
     currUserId =user.name
-    if not isRoomOwner(currUserId, roomId):
+    if not isRoomOwner(currUserId, roomId) and currUserId != targetUserId:
         print(
             f"[AUTH WARN]: user {currUserId} tried to remove user from room he is not the owner of it"
         )

@@ -172,7 +172,7 @@ export class ChatService {
         observe: 'response',
       }).toPromise().then((res) => {
         console.log(res)
-        observer.next(res.body)
+        observer.next({...res.body, members:[{},]})
       }).catch(observer.error)
     })
   }
