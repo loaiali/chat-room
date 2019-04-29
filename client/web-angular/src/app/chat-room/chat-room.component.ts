@@ -56,7 +56,8 @@ export class ChatRoomComponent implements OnInit {
     this.chatService
       .recNewMessage()
       .subscribe((message) => {
-        this.messages.push(message);
+        if (message["room"] === this.roomId)
+          this.messages.push(message);
       });
   }
 
