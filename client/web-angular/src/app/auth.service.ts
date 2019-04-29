@@ -20,7 +20,7 @@ export interface UserInfoType {
 })
 export class AuthService {
   private user: UserType;
-  private url = "http://localhost:5000"
+  private url = "http://192.168.34.231:5000"
   constructor(private http: HttpClient) {
     this.user = {
       name: "",
