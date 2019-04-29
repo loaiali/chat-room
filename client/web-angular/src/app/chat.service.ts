@@ -29,6 +29,7 @@ export class ChatService {
     // const room = ["room1", "room2", "room3", "room4", "room5", "room6", "room7", "room8", "room9"][Math.floor(Math.random() * (8 - 0 + 1) + 0)]
     const fullMessage = {
       content: message,
+      owner: this.authService.getCurrUser().name,
       date: Date.now(),
       token: this.currToken(),
       room: room,

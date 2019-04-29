@@ -10,7 +10,7 @@
 
         <li *ngFor="let room of rooms" class="list-group-item d-flex justify-content-between align-items-center" (click)="roomClicked(room)">
             {{room.roomName}} {{room.lastMessage}}
-            <span class="badge badge-primary badge-pill" style="background-color: #251605;">14</span>
+            <span class="badge badge-primary badge-pill" style="background-color: #251605;">{{room['members'].length}}</span>
         </li>
 
     </ul>
