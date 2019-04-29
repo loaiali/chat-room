@@ -53,6 +53,13 @@ export class ChatRoomComponent implements OnInit {
       .subscribe((message) => {
         this.messages.push(message);
       });
+
+      this.chatService
+      .recNewUserJoined()
+      .subscribe((data)=>{
+        console.log("new user came",data);
+        this.messages.push({owner:data["UserId"]+" has joined"});
+      });
   }
 
   nowStr() {
