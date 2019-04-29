@@ -1,0 +1,20 @@
+<div class="portlet portlet-default">
+
+
+
+  <div id="chat" class="panel-collapse collapse in">
+    <div>
+      <div class="portlet-body chat-widget" style="overflow-y: scroll; width: auto; height:76vh;">
+
+        <app-chat-message *ngFor="let message of messages" [message]="message"> </app-chat-message>
+      </div>
+    </div>
+
+    <div  style="float: bottom; width:100%; ">
+      <!-- send message -->
+      <input [(ngModel)]="_inputMessage" (keyup)="$event.keyCode == 13 && _onSendClicked()" style=" height:50px; width:90%;" />
+      <button (click)="_onSendClicked()" class="btn btn-lg">Send</button>
+    </div>
+  </div>
+</div>
+

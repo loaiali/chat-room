@@ -1,12 +1,30 @@
-<div class="col-lg-2">
+<div class="col-lg-2" style="background-color: #231942; height:100%;">
 
-  <ul> 
-    <li *ngFor="let room of rooms" (click)="roomClicked(room)" >
+    <!-- <h2 style="color:white;"> Avaliable rooms </h2> -->
+
+    <ul class="list-group">
+        <!--  <li *ngFor="let room of rooms" (click)="roomClicked(room)" >
       {{room.roomName}}
       {{room.lastMessage}}
-  </li>
-</ul>
+  </li>-->
 
-<input [(ngModel)]="_inputRoomName">
-<button (click)="_createNewRoomClicked()">create new room</button>
+        <li *ngFor="let room of rooms" class="list-group-item d-flex justify-content-between align-items-center" (click)="roomClicked(room)">
+            {{room.roomName}} {{room.lastMessage}}
+            <span class="badge badge-primary badge-pill" style="background-color: #251605;">14</span>
+        </li>
+
+    </ul>
+
+    <div>
+        <div style="display:inline-block;">
+
+            <input [(ngModel)]="_inputRoomName" size="10">
+        </div>
+
+        <div style="display:inline-block; margin-left:5px;">
+
+            <button class="btn" (click)="_createNewRoomClicked()"><i style="font-size:15px;" class="fa">&#xf067;</i>New room</button>
+        </div>
+    </div>
+
 </div>
