@@ -60,7 +60,7 @@ export class ChatService {
     return Observable.create((observer)=>{
       this.socket.on('newRoom',(message)=>{
         console.log("new room for current user",message)
-        observer.next(message);
+        observer.next({...message, members:[],});
       });
     });
   }
