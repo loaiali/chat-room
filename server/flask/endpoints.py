@@ -3,7 +3,6 @@ from flask import render_template, jsonify, request
 from wrappers import user_required,auth_required
 import jwt
 import datetime
-from cors import crossdomain, cors_enabled
 from flask_cors import cross_origin
 
 @app.route('/login', methods=["GET"])
