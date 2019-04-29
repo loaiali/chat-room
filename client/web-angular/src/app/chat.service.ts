@@ -46,6 +46,14 @@ export class ChatService {
       });
     });
   }
+  public recNewUserJoined=()=>{
+    return Observable.create((observer)=>{
+      this.socket.on('UserJoined',(message)=>{
+        console.log("new User joined this room",message)
+        observer.next(message);
+      });
+    });
+  }
 
   /**
    * return old chats of current room
@@ -141,6 +149,7 @@ export class ChatService {
       observer.complete()
     })*/
   }
+  
 
   public createNewRoom(name) {
     return Observable.create((observer) => {
