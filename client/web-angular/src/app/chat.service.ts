@@ -56,6 +56,15 @@ export class ChatService {
     });
   }
 
+  public recUserHasRemoved=()=>{
+    return Observable.create((observer)=>{
+      this.socket.on('UserRemoved', (message) => {
+        console.log("A user has removed", message)
+        observer.next(message);
+      });
+    });
+  }
+
   /**
    * return old chats of current room
    */

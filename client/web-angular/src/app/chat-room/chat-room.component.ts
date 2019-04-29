@@ -60,6 +60,12 @@ export class ChatRoomComponent implements OnInit {
         console.log("new user came",data);
         this.messages.push({owner:data["UserId"]+" has joined"});
       });
+
+      this.chatService
+      .recUserHasRemoved()
+      .subscribe((data) => {
+        this.messages.push({owner:data["UserId"]+" has been removed"});        
+      });
   }
 
   nowStr() {
@@ -69,13 +75,13 @@ export class ChatRoomComponent implements OnInit {
   }
 
   _onAddUserClicked() {
-    //this._inputUser = ''
     this.chatService.addUser(this.roomId, this._inputUser)
+    this._inputUser = ''
   }
 
   _onRemoveUserClicked() {
-    //this._inputUser = ''
     this.chatService.removeUser(this.roomId, this._inputUser)
+    this._inputUser = ''
   }
 
   _onLeaveRoomClicked() {

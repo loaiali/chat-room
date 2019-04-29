@@ -66,8 +66,8 @@
 
                             <!-- <label> enter the name of the user you want to add or remove from this chat room</label>-->
                             <input [(ngModel)]="_inputUser" size="30" style="height:45px;" />
-                            <button (click)="_onAddUserClicked()" class="btn btn-success btn-lg">Add User</button>
-                            <button (click)="_onRemoveUserClicked()" class="btn btn-danger btn-lg">Remove User</button>
+                            <button (click)="_onAddUserClicked()" data-dismiss="modal" class="btn btn-success btn-lg">Add User</button>
+                            <button (click)="_onRemoveUserClicked()" data-dismiss="modal" class="btn btn-danger btn-lg">Remove User</button>
                         </div>
                     </div>
                     <div class="modal-footer">

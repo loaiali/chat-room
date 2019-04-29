@@ -88,7 +88,7 @@ class DBManager:
         #users=[]
         
         #cursor =self.db.my_collection.find()
-        room=self.db.my_collection.find_one({"_id":ObjectId(roomID)})
+        room=self.db.my_collection.find_one({"_id":ObjectId(roomID)},{"members"})
         return room["members"]
 
 
@@ -114,23 +114,4 @@ class DBManager:
 
 if __name__ == "__main__":
     dbmanager = DBManager("ChatDB")
-    response=dbmanager.retrieveOne({"roomName":"room2"})
-    dbmanager.addUserToRoom(response["_id"],"userId7")
-    #dbmanager.insertUser("loaiAli2","HelloWorld","imfunky505@ymail.com","")
-    #dbmanager.updateSID("loaiAli2","hello2")
-    #dbmanager.updateSIDUsingSID("hello2")
-    #dbmanager.removeSID("8ee2356fbbde4b15aa720c6e728e3077")
-    print(dbmanager.getUsersOfRoom("5cc5ee3af7df361500e45c30"))
-    #print(dbmanager.getAllMessagesOfRoom(ObjectId("5cc39717f7df3645f8b65cc4")))
-    #  dbmanager.updateSID("userId6","")
-    #dbmanager.addMessageToRoom(response["_id"],"userId3","Hey userId4")
-    #rooms=dbmanager.retrieveAll({"members":"userId4"})
-    #print(dbmanager.getUserSID("userId6"))
-    #dbmanager.removeUserfromRoom("userId3",response["_id"])
-    #dbmanager.insertSID("loaiAli","")
-    #dbmanager.createRoom("room2","loaiAli")
-    #print(type(response["_id"]))
-    #dbmanager.addMessageToRoom(ObjectId("5cc39717f7df3645f8b65cc4"),"loaiAli2","eshm3na ba2a3")
-    #print(dbmanager.getAllRoomsOfUser("loaiAli"))
-    #print(dbmanager.retrieveAll({"members":"loaiAli"}))
-    #print(dbmanager.updateSIDUsingSID("aa95ddb6692d469d8743c7304196c899"))
+    print(dbmanager.getUsersOfRoom("5cc4d8b945ba86ea1535870b"))

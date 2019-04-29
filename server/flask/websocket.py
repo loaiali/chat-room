@@ -23,22 +23,26 @@ def signedIn(user, data):  # tested = true
 @socketio.on('removeUser')
 @auth_required()
 def removeUser(user, data):
-    userIdToRemove=data["userId"]
+    targetUserId=data["userId"]
     roomId=data["roomId"]
-    print(type(user),userIdToRemove,roomId)
-    print(f"removing {userIdToRemove} From {roomId}++++++++++++++++++++++++++")
+    print(type(user),targetUserId,roomId)
+    print(f"removing {targetUserId} From {roomId}++++++++++++++++++++++++++")
+    existingUsers = mydb.getUsersOfRoom(roomId)
+    if not (targetUserId in existingUsers):
+        print("removing already removed", existingUsers)
+        return
     currUserId =user.name
     if not isRoomOwner(currUserId, roomId):
         print(
             f"[AUTH WARN]: user {currUserId} tried to remove user from room he is not the owner of it"
         )
         return
-    userSIDToRemove = mydb.getUserSID(userIdToRemove)
-    socketio.emit("UserRemoved",{"UserId":userIdToRemove},room=str(roomId))    
+    userSIDToRemove = mydb.getUserSID(targetUserId)
+    mydb.removeUserfromRoom(targetUserId, roomId)
+    socketio.emit("UserRemoved",{"UserId":targetUserId, "roomId": roomId},room=str(roomId))    
     if userSIDToRemove != "":
         leave_room(roomId, sid=userSIDToRemove)
     
-    mydb.removeUserfromRoom(userIdToRemove, roomId)
 
 
 @socketio.on('addUser')
@@ -54,13 +58,16 @@ def addUserToRoom(user, data):
         )
         return
     print(f"adding {targetUserId} to the room with ID {roomId}")
+    existingUsers = mydb.getUsersOfRoom(roomId)
+    if targetUserId in existingUsers:
+        return
+    targetUserSID = mydb.getUserSID(targetUserId)
     mydb.addUserToRoom(roomId, targetUserId)
 
-    targetUserSID = mydb.getUserSID(targetUserId)
     print(f"adding {targetUserSID} to {roomId}")
     
     #emit to the room members that a new member has joined the room
-    socketio.emit("UserJoined",{"UserId":targetUserId},room=str(roomId))
+    socketio.emit("UserJoined",{"UserId":targetUserId, "roomId": roomId},room=str(roomId))
     #emit to the added User to refresh his page if he is online 
     if targetUserSID!="":
         socketio.emit("newRoom",{"roomInfo":roomInfo},room=targetUserSID)
