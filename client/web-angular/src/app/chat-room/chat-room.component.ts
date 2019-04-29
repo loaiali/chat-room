@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 
 import { ChatService } from '../chat.service';
@@ -17,6 +17,9 @@ export class ChatRoomComponent implements OnInit {
   constructor(private chatService: ChatService, private route: ActivatedRoute) {
     this.roomId = "room1"
   }
+
+
+  
 
   /**
    * load the chat room after change in the room id
@@ -41,6 +44,8 @@ export class ChatRoomComponent implements OnInit {
     this._inputMessage = ''
   }
 
+
+
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.roomId = params.get("room")
@@ -53,20 +58,10 @@ export class ChatRoomComponent implements OnInit {
       .subscribe((message) => {
         this.messages.push(message);
       });
-
-      this.chatService
-      .recNewUserJoined()
-      .subscribe((data)=>{
-        console.log("new user came",data);
-        this.messages.push({owner:data["UserId"]+" has joined"});
-      });
-
-      this.chatService
-      .recUserHasRemoved()
-      .subscribe((data) => {
-        this.messages.push({owner:data["UserId"]+" has been removed"});        
-      });
   }
+
+
+  
 
   nowStr() {
     const d = new Date()
@@ -75,13 +70,13 @@ export class ChatRoomComponent implements OnInit {
   }
 
   _onAddUserClicked() {
+    //this._inputUser = ''
     this.chatService.addUser(this.roomId, this._inputUser)
-    this._inputUser = ''
   }
 
   _onRemoveUserClicked() {
+    //this._inputUser = ''
     this.chatService.removeUser(this.roomId, this._inputUser)
-    this._inputUser = ''
   }
 
   _onLeaveRoomClicked() {
