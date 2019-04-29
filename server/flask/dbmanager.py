@@ -52,7 +52,7 @@ class DBManager:
     
     def getAllMessagesOfRoom(self,roomId):
         room = self.db.my_collection.find_one({"_id":ObjectId(roomId)})
-        return {"messages":room["messages"],"roomName":room["roomName"]}
+        return {"messages":room["messages"],"roomName":room["roomName"], "members": room["members"]}
    
     #key will be like
     # {"key": value}

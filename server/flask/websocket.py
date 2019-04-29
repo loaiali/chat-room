@@ -69,6 +69,7 @@ def addUserToRoom(user, data):
     #emit to the room members that a new member has joined the room
     socketio.emit("UserJoined",{"UserId":targetUserId, "roomId": roomId},room=str(roomId))
     #emit to the added User to refresh his page if he is online 
+    roomInfo["members"].append({})
     if targetUserSID!="":
         socketio.emit("newRoom",{"roomInfo":roomInfo},room=targetUserSID)
         join_room(roomId, sid=targetUserSID)
