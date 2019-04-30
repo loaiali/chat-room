@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http'
 import { getToken } from '@angular/router/src/utils/preactivation';
 import { AuthService } from './auth.service';
+import { server_ip } from '../config'
 
 
 @Injectable({
@@ -12,7 +13,8 @@ import { AuthService } from './auth.service';
 export class ChatService {
   // url of the server
   // private url = 'http://localhost:53546';
-  private url = 'http://192.168.43.231:5000';
+  // private url = 'http://192.168.43.231:5000';
+  private url = `http://${server_ip}:5000`
   private socket;
   public currUser: String;
 

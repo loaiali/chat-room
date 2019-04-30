@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http'
 import { Base64 } from 'js-base64';
+import { server_ip } from '../config'
 
 export interface UserType {
   name: String;
@@ -20,7 +21,9 @@ export interface UserInfoType {
 })
 export class AuthService {
   private user: UserType;
-  private url = "http://192.168.43.231:5000"
+  // private url = "http://192.168.43.231:5000"
+  // private url = "http://localhost:5000"
+  private url = `http://${server_ip}:5000`
   constructor(private http: HttpClient) {
     this.user = {
       name: "",
