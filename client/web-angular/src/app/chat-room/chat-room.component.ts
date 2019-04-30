@@ -19,7 +19,7 @@ export class ChatRoomComponent implements OnInit {
   }
 
 
-  
+
 
   /**
    * load the chat room after change in the room id
@@ -59,10 +59,24 @@ export class ChatRoomComponent implements OnInit {
         if (message["room"] === this.roomId)
           this.messages.push(message);
       });
+
+    this.chatService
+      .recNewUserJoined()
+      .subscribe((data) => {
+        if (data["roomId"] === this.roomId)
+          this.messages.push({ owner: `${data["userId"]} has just joined the room` });
+      });
+
+      this.chatService
+      .recUserHasRemoved()
+      .subscribe((data) => {
+        if (data["roomId"] === this.roomId)
+          this.messages.push({ owner: `${data["userId"]} has just removed from the room` });
+      });
   }
 
 
-  
+
 
   nowStr() {
     const d = new Date()

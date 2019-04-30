@@ -52,3 +52,17 @@ def auth_required():
         decorated.__name__ = "{}_{}".format(decorated.__name__, fn.__name__)
         return decorated
     return wrapper
+
+
+def log(fileName):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated(*args, **kwargs):
+            print("-----------------------------------------------------------------------")
+            print(f"[in {fileName} at function {fn.__name__}]: {args} {kwargs}")
+            res = fn(*args, **kwargs)
+            print("-----------------------------------------------------------------------")
+            return res
+        decorated.__name__ = "{}_{}".format(decorated.__name__, fn.__name__)
+        return decorated
+    return wrapper

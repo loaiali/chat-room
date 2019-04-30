@@ -17,7 +17,12 @@ import pymongo
 from bson import ObjectId
 # from bson.json_util import dumps
 
+def _toObjectId(string):
+    if type(string) is ObjectId:
+        return string
+    return ObjectId(string)
 class DBManager:
+
     def __init__(self, dbname, host="localhost", port=27017):
         self.client = pymongo.MongoClient(host, port)
         self.db = self.client.get_database(dbname)  
@@ -50,9 +55,20 @@ class DBManager:
         self.db.my_collection.update({'_id': ObjectId(roomId)},{'$push': {'messages': {**message, "owner":username}}})
     
     
-    def getAllMessagesOfRoom(self,roomId):
+    def getRoomInfo(self, roomId): # tested = true
+        '''
+            return the room name and the messages {"roomName": <name>, "messages": [{}, {}]}
+        '''
+        roomId = _toObjectId(roomId)
+        room = self.db.my_collection.find_one({"_id":roomId})
+        return {"messages":room["messages"],"roomName":room["roomName"]}
+   
+    def getRoomInfoNoMessages(self,roomId):
+        '''
+            return the room name, the members and the room id
+        '''
         room = self.db.my_collection.find_one({"_id":ObjectId(roomId)})
-        return {"messages":room["messages"],"roomName":room["roomName"], "members": room["members"]}
+        return {"roomName": room["roomName"], "members": room["members"], "_id": str(room["_id"])}
    
     #key will be like
     # {"key": value}
@@ -70,17 +86,15 @@ class DBManager:
     	return objects  
     
     
-    def getAllRoomsOfUser(self,userId):
+    def getUserRooms(self, userId): # tested = true
         data = []
-        cur = self.db.my_collection.find({"members":userId})
+        cur = self.db.my_collection.find({"members":userId}, { "messages": 0})
         for doc in cur:
             doc["_id"] = str(doc["_id"])
             data.append(doc)
         return data
             
     
-    #key will be like
-    # {"key": value}
     def deleteOne(self, key):
     	self.db.my_collection.delete_one(key)   
     
@@ -91,27 +105,21 @@ class DBManager:
         room=self.db.my_collection.find_one({"_id":ObjectId(roomID)},{"members"})
         return room["members"]
 
-
-    #key and update will be like
-    # {"key": value}
-    
     
     def updateOne(self, key, update):
     	self.db.my_collection.update_one(key, { '$set':update}, upsert=True)    
 
     
-    def getUserSID(self,userId):
-        print(type(userId),userId,"++++++++++++++++")
+    def getUserSID(self,userId): # tested = true
         SID= self.db.my_collection.find_one({"_id":userId},{"_id":0,"SID":1})
         return SID["SID"]
     
-    def removeUserfromRoom(self,userId,roomId):
-        #print(type(userId.name))
-        #print(roomInfo["roomId"])
-        print(type(userId),userId,type(roomId),roomId)
+    def removeUserfromRoom(self,userId,roomId): # tested = true
+        if type(roomId) is str:
+            roomId = ObjectId(roomId)
         self.db.my_collection.update({'_id':ObjectId(roomId)},{'$pull':{"members":userId}})
 
 
 if __name__ == "__main__":
     dbmanager = DBManager("ChatDB")
-    print(dbmanager.getUsersOfRoom("5cc4d8b945ba86ea1535870b"))
+    print(dbmanager.removeUserfromRoom("ammar4", ObjectId("5cc78bf0dae7d6ceb019043c")))

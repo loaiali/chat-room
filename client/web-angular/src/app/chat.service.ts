@@ -42,32 +42,32 @@ export class ChatService {
   public recNewMessage = () => {
     return Observable.create((observer) => {
       this.socket.on('show-message', (message) => {
-        console.log("yessssssssss, new message")
+        console.log("show-message", message)
         observer.next(message);
       });
     });
   }
-  public recNewUserJoined=()=>{
-    return Observable.create((observer)=>{
-      this.socket.on('UserJoined',(message)=>{
-        console.log("new User joined this room",message)
+  public recNewUserJoined = () => {
+    return Observable.create((observer) => {
+      this.socket.on('userJoined', (message) => {
+        console.log("new User joined this room", message)
         observer.next(message);
       });
     });
   }
 
-  public recNewRoom=()=>{
-    return Observable.create((observer)=>{
-      this.socket.on('newRoom',(message)=>{
-        console.log("new room for current user",message)
-        observer.next(message.roomInfo);
+  public recNewRoom = () => {
+    return Observable.create((observer) => {
+      this.socket.on('newRoom', (message) => {
+        console.log("new room for current user", message)
+        observer.next(message);
       });
     });
   }
 
-  public recUserHasRemoved=()=>{
-    return Observable.create((observer)=>{
-      this.socket.on('UserRemoved', (message) => {
+  public recUserHasRemoved = () => {
+    return Observable.create((observer) => {
+      this.socket.on('userRemoved', (message) => {
         console.log("A user has removed", message)
         observer.next(message);
       });
@@ -86,7 +86,7 @@ export class ChatService {
         console.log(res);
         observer.next(res.body["data"])
         observer.complete()
-      }).catch(observer.error);
+      }).catch(console.log);
     });
   }
 
@@ -98,7 +98,6 @@ export class ChatService {
    */
   public getSubscribedRooms() {
     return Observable.create((observer) => {
-      observer.next([{ name: "room1", "lastMessage": "ok, that will be great" }, { "lastMessage": "thanks", name: "room2" },])
       this.http.get(`${this.url}/user/rooms`, {
         headers: { "x-access-token": this.currToken() },
         observe: 'response'
@@ -106,17 +105,17 @@ export class ChatService {
         console.log(response);
         observer.next(response.body["data"])
         observer.complete()
-      }).catch(observer.error);
+      }).catch(console.log);
     });
   }
 
   public removeUser(room, user) {
-    const fullMessage={
-      token:this.currToken(),
-      userId:user,
-      roomId:room
+    const fullMessage = {
+      token: this.currToken(),
+      userId: user,
+      roomId: room
     }
-    this.socket.emit("removeUser",fullMessage)
+    this.socket.emit("removeUser", fullMessage)
     /*Observable.create((observer) => {
       // TODO: remove fake ack
       observer.next("removed")
@@ -127,19 +126,19 @@ export class ChatService {
         observe: 'response'
       }).toPromise().then((res) => {
         observer.next(res)
-      }).catch(observer.error)
+      }).catch(console.log)
     })*/
   }
   public addUser(room, newUser) {
     console.log(newUser)
-    const fullMessage={
-      token:this.currToken(),
-      userId:newUser,
-      roomId:room
+    const fullMessage = {
+      token: this.currToken(),
+      userId: newUser,
+      roomId: room
     }
-    this.socket.emit("addUser",fullMessage)
-    
-    
+    this.socket.emit("addUser", fullMessage)
+
+
     /*Observable.create((observer) => {
       // TODO: remove fake ack
       observer.next("added")
@@ -150,7 +149,7 @@ export class ChatService {
         observe: 'response'
       }).toPromise().then((res) => {
         observer.next(res)
-      }).catch(observer.error)
+      }).catch(console.log)
     })*/
   }
 
@@ -163,17 +162,18 @@ export class ChatService {
     // }
     // this.socket.emit("leaveRoom", fullMessage)
   }
-  
+
 
   public createNewRoom(name) {
     return Observable.create((observer) => {
-      this.http.post(`${this.url}/rooms`, {"name": name}, {
+      this.http.post(`${this.url}/rooms`, { "name": name }, {
         headers: { "x-access-token": this.currToken() },
         observe: 'response',
       }).toPromise().then((res) => {
         console.log(res)
-        observer.next({...res.body, members:[{},]})
-      }).catch(observer.error)
+        observer.next({ ...res.body, members: [this.authService.getCurrUser().name,] })
+        observer.complete()
+      }).catch(console.log)
     })
   }
   private nowStr() {

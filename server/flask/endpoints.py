@@ -37,7 +37,7 @@ def signup():
 @user_required()
 def getRoomInfo(user, roomId):
     # TODO: check here that the user is in that room
-    roomInfo = mydb.getAllMessagesOfRoom(roomId)
+    roomInfo = mydb.getRoomInfo(roomId)
     return jsonify({"data": roomInfo})
 
 
@@ -59,7 +59,7 @@ def getUserRooms(user):
         return all rooms, this user is in
     '''
     print(user.name)
-    rooms = mydb.getAllRoomsOfUser(user.name)
+    rooms = mydb.getUserRooms(user.name)
     return jsonify({"data": rooms})
 
 @app.route('/user/created-rooms')

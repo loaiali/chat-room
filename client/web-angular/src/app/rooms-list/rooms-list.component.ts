@@ -19,12 +19,13 @@ export class RoomsListComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("rooms-list on init")
     this.chatService
       .recNewUserJoined()
       .subscribe((data) => {
         this.rooms.forEach((room) => {
           if (data["roomId"] === room._id) {
-            room.members = [...room.members, {}]
+            room.members.push(data["userId"])
           }
         })
       });
@@ -38,24 +39,14 @@ export class RoomsListComponent implements OnInit {
     this.chatService
       .recUserHasRemoved()
       .subscribe((data) => {
-        this.rooms.forEach((room, i) => {
-          if (data["roomId"] === room._id) {
-            if (data["UserId"] === this.authService.getCurrUser().name) { // if that is me !!, remove this room
-              console.log()
-              // this.rooms[i] = null
-              delete this.rooms[i]
-              this.router.navigate(["rooms"]);
-              return
-            }
-            room.members.pop()
-            // room.members.forEach((member, i) => {
-            //   if (data["UserId"] === member) {
-            //     // room.members[i] = null
-            //     room.members.pop()
-            //   }
-            // })
-          }
-        })
+        if (data["userId"] === this.authService.getCurrUser().name){
+          console.log("tmm ya donya !!")
+          this.rooms = this.rooms.filter((room) => room._id !== data.roomId)
+          this.router.navigate(["rooms"])
+          return
+        }
+        const room = this.rooms.find((room) => room._id === data.roomId)
+        room.members.pop()
       });
   }
 
