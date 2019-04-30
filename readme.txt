@@ -14,3 +14,9 @@ client:
 3- run `npm install`
 4- install angular-cli using `npm install -g @angular/cli`
 5- run `ng serve -o` to open the web in the browser
+
+
+client-app
+* This is a native (not expo) react-native project
+* don't use expo
+1- import the react-native project and run it (follow this link https://facebook.github.io/react-native/docs/getting-started)
