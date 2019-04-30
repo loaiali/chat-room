@@ -19,7 +19,6 @@ export class RoomsListComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("rooms-list on init")
     this.chatService
       .recNewUserJoined()
       .subscribe((data) => {
